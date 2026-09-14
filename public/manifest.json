@@ -1,0 +1,32 @@
+{
+  "name": "Pomodoro - 심플 뽀모도로 타이머",
+  "short_name": "Pomodoro",
+  "description": "집중 시간과 휴식 시간을 설정하고 반복할 수 있는 심플한 뽀모도로 타이머",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EAE7E1",
+  "theme_color": "#E8604C",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

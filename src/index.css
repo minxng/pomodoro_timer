@@ -141,6 +141,29 @@ input[type="number"] {
   font-size: 22px;
   font-weight: 600;
 }
+.stepper__num-input {
+  width: 44px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: center;
+  padding: 0;
+}
+.stepper__num-input:focus {
+  outline: none;
+}
+/* 숫자 input 기본 스핀 화살표 제거 */
+.stepper__num-input::-webkit-outer-spin-button,
+.stepper__num-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.stepper__num-input[type="number"] {
+  -moz-appearance: textfield;
+}
 .stepper__unit {
   font-size: 13px;
   color: var(--ink-soft);

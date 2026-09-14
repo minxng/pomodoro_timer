@@ -185,6 +185,17 @@ export default function App() {
 
   /* ---------------- 핸들러 ---------------- */
   const clampMinutes = (n: number): number => Math.min(60, Math.max(1, n));
+  const handleMinutesInput = (
+    e: ChangeEvent<HTMLInputElement>,
+    setter: React.Dispatch<React.SetStateAction<number>>,
+  ): void => {
+    const raw = e.target.value;
+    if (raw === "") {
+      setter(1); // 빈 값 방지, 최소값으로
+      return;
+    }
+    setter(clampMinutes(Number(raw)));
+  };
 
   const handleStart = (): void => {
     setCurrentPhase("focus");
@@ -256,7 +267,15 @@ export default function App() {
                   −
                 </button>
                 <span className="stepper__value">
-                  <span className="stepper__num">{focusMinutes}</span>
+                  <input
+                    type="number"
+                    className="stepper__num-input"
+                    min={1}
+                    max={60}
+                    value={focusMinutes}
+                    onChange={(e) => handleMinutesInput(e, setFocusMinutes)}
+                    aria-label="집중 시간 직접 입력"
+                  />
                   <span className="stepper__unit">분</span>
                 </span>
                 <button
@@ -282,7 +301,15 @@ export default function App() {
                   −
                 </button>
                 <span className="stepper__value">
-                  <span className="stepper__num">{breakMinutes}</span>
+                  <input
+                    type="number"
+                    className="stepper__num-input"
+                    min={1}
+                    max={60}
+                    value={breakMinutes}
+                    onChange={(e) => handleMinutesInput(e, setBreakMinutes)}
+                    aria-label="휴식 시간 직접 입력"
+                  />
                   <span className="stepper__unit">분</span>
                 </span>
                 <button

@@ -1,0 +1,460 @@
+/* =============================================================
+   TOKENS
+   ============================================================= */
+:root {
+  --bg: #eae7e1;
+  --surface: #fcfbf9;
+  --ink: #221f1a;
+  --ink-soft: #736c62;
+  --ink-faint: #a39c90;
+  --border: rgba(34, 31, 26, 0.1);
+  --border-strong: rgba(34, 31, 26, 0.16);
+
+  --font-ui: "Manrope", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+
+  --radius-lg: 26px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 20px 50px -24px rgba(34, 31, 26, 0.35);
+}
+
+/* =============================================================
+   RESET & BASE
+   ============================================================= */
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: var(--font-ui);
+  color: var(--ink);
+  background: var(--bg);
+}
+button {
+  font-family: inherit;
+}
+input[type="number"] {
+  font-family: inherit;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  /* --focus-color / --break-color / --phase-color 는 App.jsx에서 인라인으로 주입됨 */
+}
+
+.card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 36px 30px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* =============================================================
+   설정 화면
+   ============================================================= */
+.screen--settings {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.screen__header {
+  text-align: left;
+  margin-bottom: 2px;
+}
+.brand {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.brand__sub {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.field--row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.field__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+/* -- 시간 스테퍼 -- */
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  padding: 6px;
+}
+.stepper__btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 1px 0 var(--border-strong);
+  transition: transform 0.12s ease;
+}
+.stepper__btn:active {
+  transform: scale(0.92);
+}
+.stepper__value {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--font-mono);
+}
+.stepper__num {
+  font-size: 22px;
+  font-weight: 600;
+}
+.stepper__unit {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* -- 반복 설정 -- */
+.repeat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pillgroup {
+  display: flex;
+  background: var(--bg);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+}
+.pillgroup__label {
+  flex: 1;
+  text-align: center;
+  padding: 9px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.pillgroup__label.is-active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 1px 0 var(--border-strong);
+}
+
+.repeat__count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  transition: opacity 0.15s ease;
+}
+.repeat__count.is-disabled {
+  opacity: 0.35;
+}
+.repeat__input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.repeat__input:focus {
+  outline: none;
+}
+.repeat__count-unit {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* -- 테마 스와치 -- */
+.themepicker {
+  display: flex;
+  gap: 12px;
+}
+.themepicker__swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: block;
+  padding: 0;
+  border: none;
+  box-shadow: 0 0 0 1px var(--border);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.themepicker__swatch.is-active {
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 4px var(--ink);
+  transform: scale(1.06);
+}
+
+/* -- 알림 토글 스위치 -- */
+.switch {
+  position: relative;
+  display: inline-block;
+}
+.switch input {
+  position: absolute;
+  opacity: 0;
+  width: 44px;
+  height: 26px;
+  margin: 0;
+  cursor: pointer;
+}
+.switch__track {
+  display: block;
+  width: 44px;
+  height: 26px;
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+  position: relative;
+  transition: background 0.15s ease;
+}
+.switch__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease;
+}
+.switch input:checked ~ .switch__track {
+  background: var(--focus-color, #e8604c);
+}
+.switch input:checked ~ .switch__track .switch__thumb {
+  transform: translateX(18px);
+}
+
+/* -- 버튼 공통 -- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+}
+.button--primary {
+  width: 100%;
+  padding: 15px 0;
+  border-radius: var(--radius-md);
+  background: var(--ink);
+  color: var(--surface);
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  transition: opacity 0.15s ease;
+}
+.button--primary:hover {
+  opacity: 0.88;
+}
+
+/* =============================================================
+   타이머 실행 화면
+   ============================================================= */
+.screen--timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 8px 0 4px;
+}
+
+.session-indicator--count {
+  display: flex;
+  gap: 8px;
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border-strong);
+}
+.dot--done {
+  background: var(--phase-color, var(--focus-color));
+  opacity: 0.4;
+}
+.dot--current {
+  background: var(--phase-color, var(--focus-color));
+}
+
+.session-indicator--infinite {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+.session-indicator--infinite .infinity {
+  font-size: 16px;
+  color: var(--phase-color, var(--focus-color));
+}
+
+.dial {
+  position: relative;
+  width: 240px;
+  height: 240px;
+}
+.dial__ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.dial__track {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 10;
+}
+.dial__progress {
+  fill: none;
+  stroke: var(--phase-color, var(--focus-color));
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+.dial__readout {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.dial__time {
+  font-family: var(--font-mono);
+  font-size: 44px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.dial__phase {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--phase-color, var(--focus-color));
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.button--ghost,
+.button--play {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--ink-soft);
+}
+.button--ghost svg {
+  width: 20px;
+  height: 20px;
+}
+.button--ghost:hover {
+  color: var(--ink);
+}
+.button--play {
+  width: 64px;
+  height: 64px;
+  background: var(--phase-color, var(--focus-color));
+  color: var(--surface);
+}
+.button--play svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* =============================================================
+   완료 화면
+   ============================================================= */
+.screen--done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 24px 0 4px;
+}
+.done__emoji {
+  font-size: 40px;
+}
+.done__title {
+  margin: 4px 0 0;
+  font-size: 20px;
+  font-weight: 800;
+}
+.done__sub {
+  margin: 0 0 18px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.screen--done .button--primary {
+  width: 100%;
+}
+
+/* =============================================================
+   반응형
+   ============================================================= */
+@media (max-width: 420px) {
+  .card {
+    padding: 28px 22px 24px;
+  }
+  .dial {
+    width: 210px;
+    height: 210px;
+  }
+  .dial__time {
+    font-size: 38px;
+  }
+}

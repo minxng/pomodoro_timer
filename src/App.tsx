@@ -83,6 +83,55 @@ function playBeep(): void {
     /* Web Audio 미지원 환경은 조용히 무시 */
   }
 }
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+}
+function useIsInstalled() {
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [canInstall, setCanInstall] = useState(false);
+  const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null);
+
+  useEffect(() => {
+    const standaloneQuery = window.matchMedia("(display-mode: standalone)");
+
+    const checkInstalled = () => {
+      const isStandalone =
+        standaloneQuery.matches ||
+        (window.navigator as any).standalone === true;
+      setIsInstalled(isStandalone);
+    };
+
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      deferredPromptRef.current = e as BeforeInstallPromptEvent;
+      setCanInstall(true);
+    };
+
+    checkInstalled();
+    standaloneQuery.addEventListener("change", checkInstalled);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    return () => {
+      standaloneQuery.removeEventListener("change", checkInstalled);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt,
+      );
+    };
+  }, []);
+
+  const promptInstall = async () => {
+    const deferred = deferredPromptRef.current;
+    if (!deferred) return;
+    await deferred.prompt();
+    await deferred.userChoice;
+    deferredPromptRef.current = null;
+    setCanInstall(false);
+  };
+
+  return { isInstalled, canInstall, promptInstall };
+}
 
 /* 커스텀 CSS 변수를 style에 넣기 위한 확장 타입 */
 type ThemeStyle = CSSProperties & {
@@ -244,7 +293,11 @@ export default function App() {
     "--break-color": theme.breakColor,
     "--phase-color": phaseColor,
   };
+  const { isInstalled, canInstall, promptInstall } = useIsInstalled();
 
+  const handleInstallClick = async (): Promise<void> => {
+    await promptInstall();
+  };
   return (
     <div className="app" style={rootStyle}>
       <main className="card">
@@ -529,6 +582,15 @@ export default function App() {
               다시 시작하기
             </button>
           </section>
+        )}
+        {!isInstalled && canInstall && view === "settings" && (
+          <button
+            type="button"
+            className="button button-app"
+            onClick={handleInstallClick}
+          >
+            앱 설치하기
+          </button>
         )}
       </main>
     </div>

@@ -105,6 +105,13 @@ input[type="number"] {
   font-weight: 600;
   color: var(--ink-soft);
 }
+.button-app {
+  width: 100%;
+  color: #736c62;
+  text-decoration: underline;
+  margin-top: 30px;
+  background: none;
+}
 
 /* -- 시간 스테퍼 -- */
 .stepper {

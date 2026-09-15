@@ -1,75 +1,105 @@
-# React + TypeScript + Vite
+# 🍅 Pomodoro — 심플 뽀모도로 타이머
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+집중 시간과 휴식 시간을 설정하고 반복하는, 군더더기 없는 뽀모도로 타이머 웹 앱입니다.
+웹에서 바로 사용할 수 있고, PWA로 설치하면 독립된 창으로도 사용할 수 있습니다.
 
-Currently, two official plugins are available:
+**🔗 배포 링크:** _(https://focustime-m.netlify.app)_
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ 주요 기능
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **타이머 설정** — 집중/휴식 시간을 +/- 버튼 또는 숫자 직접 입력으로 조절 (상한 없음)
+- **반복 설정** — 원하는 횟수만큼 반복하거나, 끌 때까지 무한 반복
+  - 10회 이하는 진행 상황을 점(●)으로, 11회 이상은 `(3/15)` 형태 텍스트로 표시
+- **알림 소리** — 집중 ↔ 휴식 전환 시 알림음 재생, 타이머 화면에서 아이콘 하나로 켜고 끄기
+- **5가지 테마** — Sunset / Ocean / Forest / Blossom / Mono 중 선택, 즉시 전체 UI에 반영
+- **설정 저장** — 마지막으로 사용한 설정값이 localStorage에 저장되어 다음 방문 시에도 유지
+- **PWA 설치** — 지원 브라우저에서 데스크톱/모바일 앱처럼 설치해 독립 창으로 실행 가능 (설치 가능 상태일 때만 설치 버튼 노출)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠 기술 스택
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **React + TypeScript**
+- **Vite** — 빌드 도구
+- 상태 관리는 별도 라이브러리 없이 `useState` / `useEffect`만으로 구현
+- Web Audio API로 알림음 재생 (별도 사운드 파일 불필요)
+- PWA — `manifest.json` + Service Worker (`vite-plugin-pwa`)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 📂 프로젝트 구조
 
 ```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+├── public/
+│   ├── manifest.json
+│   └── icons/
+│       ├── icon-192.png
+│       ├── icon-512.png
+│       └── icon-maskable-512.png
+├── src/
+│   ├── App.tsx              # 메인 컴포넌트 (설정 / 타이머 / 완료 화면)
+│   ├── App.css               # 전체 스타일 (테마 색상은 CSS 변수로 관리)
+│   ├── useInstallPrompt.ts   # PWA 설치 가능 여부 / 설치 상태 감지 훅
+│   └── main.tsx
+├── index.html
+├── vite.config.ts
+└── package.json
 ```
+
+---
+
+## 🚀 시작하기
+
+```bash
+# 의존성 설치
+npm install
+
+# 개발 서버 실행
+npm run dev
+
+# 프로덕션 빌드
+npm run build
+
+# 빌드 결과 미리보기
+npm run preview
+```
+
+---
+
+## 📱 PWA로 설치하기
+
+- **Chrome / Edge (Windows, macOS, Android)**: 사이트 접속 시 뜨는 설치 배너 또는 주소창의 설치 아이콘 클릭
+- **iOS Safari**: 공유 버튼 → "홈 화면에 추가"
+- 설치 후에는 브라우저 주소창 없이 독립된 창으로 실행되며, 마지막 창 크기/위치가 기억됩니다.
+
+---
+
+## 🎨 테마
+
+| 테마          | 집중 색상 | 휴식 색상 |
+| ------------- | --------- | --------- |
+| Sunset (기본) | `#E8604C` | `#4C9E8E` |
+| Ocean         | `#2E6F95` | `#7FC8A9` |
+| Forest        | `#4C6B4F` | `#A9BE6E` |
+| Blossom       | `#D46A9F` | `#F2B3B3` |
+| Mono          | `#2B2B2B` | `#6E6E6E` |
+
+---
+
+## 📝 스코프에서 제외한 것
+
+의도적으로 넣지 않은 기능입니다.
+
+- 로그인/계정, 서버/DB 연동
+- 통계·히스토리 대시보드
+- 여러 타이머 프리셋 저장
+- 태스크 리스트 연동
+- 사용자 지정 커스텀 컬러 피커
+
+---
+
+## 📄 라이선스
+
+개인 포트폴리오 프로젝트입니다.

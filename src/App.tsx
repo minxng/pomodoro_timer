@@ -314,8 +314,7 @@ export default function App() {
         {view === "settings" && (
           <section className="screen screen--settings">
             <header className="screen__header">
-              <span className="brand">🍅 Pomodoro</span>
-              <p className="brand__sub">집중과 휴식을 심플하게</p>
+              <span className="brand">🔥 Pomodoro</span>
             </header>
 
             <div className="field">

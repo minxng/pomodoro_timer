@@ -1,5 +1,5 @@
 {
-  "name": "Pomodoro - 심플 뽀모도로 타이머",
+  "name": "뽀모도로 타이머",
   "short_name": "Pomodoro",
   "description": "집중 시간과 휴식 시간을 설정하고 반복할 수 있는 심플한 뽀모도로 타이머",
   "start_url": "/",

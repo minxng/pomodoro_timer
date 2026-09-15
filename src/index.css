@@ -377,7 +377,12 @@ input[type="number"] {
 .dot--current {
   background: var(--phase-color, var(--focus-color));
 }
-
+.session-indicator--text {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
 .session-indicator--infinite {
   display: flex;
   align-items: center;
@@ -455,6 +460,9 @@ input[type="number"] {
 }
 .button--ghost:hover {
   color: var(--ink);
+}
+.button--ghost.is-active {
+  color: var(--phase-color, var(--focus-color));
 }
 .button--play {
   width: 64px;

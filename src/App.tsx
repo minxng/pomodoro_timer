@@ -132,6 +132,30 @@ function useIsInstalled() {
 
   return { isInstalled, canInstall, promptInstall };
 }
+function useDraftNumber(
+  value: number,
+  setValue: (next: number) => void,
+  min = 1,
+) {
+  const [draft, setDraft] = useState<string | null>(null);
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setDraft(e.target.value);
+  };
+
+  const onBlur = () => {
+    if (draft === null) return;
+    const parsed = Number(draft);
+    if (draft === "" || Number.isNaN(parsed)) {
+      setValue(min);
+    } else {
+      setValue(Math.max(min, Math.floor(parsed)));
+    }
+    setDraft(null);
+  };
+
+  return { value: draft ?? String(value), onChange, onBlur };
+}
 
 /* 커스텀 CSS 변수를 style에 넣기 위한 확장 타입 */
 type ThemeStyle = CSSProperties & {
@@ -233,19 +257,7 @@ export default function App() {
   }, [remainingSeconds]);
 
   /* ---------------- 핸들러 ---------------- */
-  const clampMinutes = (n: number): number => Math.min(60, Math.max(1, n));
-  const handleMinutesInput = (
-    e: ChangeEvent<HTMLInputElement>,
-    setter: React.Dispatch<React.SetStateAction<number>>,
-  ): void => {
-    const raw = e.target.value;
-    if (raw === "") {
-      setter(1); // 빈 값 방지, 최소값으로
-      return;
-    }
-    setter(clampMinutes(Number(raw)));
-  };
-
+  const clampMinutes = (n: number): number => Math.max(1, n);
   const handleStart = (): void => {
     setCurrentPhase("focus");
     setCurrentSession(1);
@@ -274,12 +286,10 @@ export default function App() {
     setCurrentSession(1);
   };
 
-  const handleRepeatCountChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    const value = Math.min(99, Math.max(1, Number(e.target.value) || 1));
-    setRepeatCount(value);
-  };
-
   /* ---------------- 파생값 ---------------- */
+  const focusField = useDraftNumber(focusMinutes, setFocusMinutes);
+  const breakField = useDraftNumber(breakMinutes, setBreakMinutes);
+  const repeatCountField = useDraftNumber(repeatCount, setRepeatCount);
   const totalForPhase =
     currentPhase === "break" ? breakMinutes * 60 : focusMinutes * 60;
   const progressFraction =
@@ -324,9 +334,9 @@ export default function App() {
                     type="number"
                     className="stepper__num-input"
                     min={1}
-                    max={60}
-                    value={focusMinutes}
-                    onChange={(e) => handleMinutesInput(e, setFocusMinutes)}
+                    value={focusField.value}
+                    onChange={focusField.onChange}
+                    onBlur={focusField.onBlur}
                     aria-label="집중 시간 직접 입력"
                   />
                   <span className="stepper__unit">분</span>
@@ -358,9 +368,9 @@ export default function App() {
                     type="number"
                     className="stepper__num-input"
                     min={1}
-                    max={60}
-                    value={breakMinutes}
-                    onChange={(e) => handleMinutesInput(e, setBreakMinutes)}
+                    value={breakField.value}
+                    onChange={breakField.onChange}
+                    onBlur={breakField.onBlur}
                     aria-label="휴식 시간 직접 입력"
                   />
                   <span className="stepper__unit">분</span>
@@ -402,10 +412,10 @@ export default function App() {
                     type="number"
                     className="repeat__input"
                     min={1}
-                    max={99}
-                    value={repeatCount}
+                    value={repeatCountField.value}
                     disabled={repeatMode === "infinite"}
-                    onChange={handleRepeatCountChange}
+                    onChange={repeatCountField.onChange}
+                    onBlur={repeatCountField.onBlur}
                     aria-label="반복 횟수"
                   />
                   <span className="repeat__count-unit">회</span>
@@ -480,18 +490,24 @@ export default function App() {
             </button>
 
             {repeatMode === "count" ? (
-              <div className="session-indicator session-indicator--count">
-                {Array.from({ length: repeatCount }).map((_, i) => (
-                  <span
-                    key={i}
-                    className={
-                      "dot" +
-                      (i < currentSession - 1 ? " dot--done" : "") +
-                      (i === currentSession - 1 ? " dot--current" : "")
-                    }
-                  />
-                ))}
-              </div>
+              repeatCount > 10 ? (
+                <div className="session-indicator session-indicator--text">
+                  ({currentSession}/{repeatCount})
+                </div>
+              ) : (
+                <div className="session-indicator session-indicator--count">
+                  {Array.from({ length: repeatCount }).map((_, i) => (
+                    <span
+                      key={i}
+                      className={
+                        "dot" +
+                        (i < currentSession - 1 ? " dot--done" : "") +
+                        (i === currentSession - 1 ? " dot--current" : "")
+                      }
+                    />
+                  ))}
+                </div>
+              )
             ) : (
               <div className="session-indicator session-indicator--infinite">
                 <span className="infinity">∞</span>
